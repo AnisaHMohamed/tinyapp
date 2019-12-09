@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/AnisaHMohamed/tinyapp/issues"
   },
-  "homepage": "https://github.com/AnisaHMohamed/tinyapp#readme"
+  "homepage": "https://github.com/AnisaHMohamed/tinyapp#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.1"
+  }
 }
