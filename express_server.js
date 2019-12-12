@@ -54,7 +54,7 @@ app.get("/urls", (req, res) => {
   let individualURLS = urlsForUser(req.session.user_id,urlDatabase);
   console.log(individualURLS);
 
-  let templateVars = { urls: individualURLS, greeting: "Hi", user: users[req.session.user_id]};
+  let templateVars = { urls: individualURLS, greeting: "A URL Shortnening App by Anisa Mohamed", user: users[req.session.user_id]};
   res.render("urls_index", templateVars);
 });
 
