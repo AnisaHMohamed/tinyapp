@@ -33,6 +33,20 @@ const paswordLookup = (passwordToCheck) =>{
   }
   return false
   }
+  const urlsForUser = (id) =>{
+   let urlsForID = {}
+   
+    for(randomID in  urlDatabase){
+      console.log("the shortURL in urls",randomID)
+     if (urlDatabase[randomID].userID === id){
+       urlsForID[randomID] = urlDatabase[randomID]
+     }
+
+   }
+
+   console.log(id,"urls for user function",urlsForID)
+  return urlsForID;
+  }
 app.set("view engine", "ejs") 
 const urlDatabase = {};
 function generateRandomString(longURL) {
@@ -63,22 +77,35 @@ app.get("/urls.json", (req, res) => {
 
 app.get("/urls", (req, res) => {
 //  console.log(req.cookies)
-  let templateVars = { urls: urlDatabase, greeting: "Hi", user: users[req.cookies.user_id]};
+let individualURLS = urlsForUser(req.cookies.user_id); 
+console.log(individualURLS)
+
+  let templateVars = { urls: individualURLS, greeting: "Hi", user: users[req.cookies.user_id]};
   res.render("urls_index", templateVars);
  });
 
  app.get("/urls/new", (req, res) => {
-   let templateVars ={user: users[req.cookies.user_id]}
+  let templateVars ={user: users[req.cookies.user_id]}
+ 
+  if (!users[req.cookies.user_id]){
+    res.redirect("/login");
+   return
+   }
+
   res.render("urls_new",templateVars);
 });
 
  app.get("/urls/:shortURL", (req, res) => {
-  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], user: users[req.cookies.user_id]};
+
+  console.log(urlDatabase)
+  console.log(req.params.shortURL)
+
+  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user: users[req.cookies.user_id]};
+
   res.render("urls_show", templateVars);
 });
 app.get("/u/:shortURL", (req, res) => {
-   const longURL =  urlDatabase[req.params.shortURL]
-   //console.log(longURL)
+   const longURL =  urlDatabase[req.params.shortURL].longURL
   res.redirect(longURL);
 });
 app.get("/registration", (req,res)=>{
@@ -97,25 +124,34 @@ res.render('registration',templateVars)
 
 
 app.post("/urls/:shortURL/delete",(req,res) =>{
-  delete urlDatabase[req.params.shortURL];
-  //console.log(urlDatabase)
+  console.log("shortURL plus delete",req.params.shortURL,"the user id is below")
+  /* if the user is the user at short url del */
+  console.log(req.cookies.user_id)
+  if(req.cookies.user_id === urlDatabase[req.params.shortURL].userID){
+    delete urlDatabase[req.params.shortURL];
+  }
+ 
+  //console.log(urlDatabase) Nmxjhp
   res.redirect('/urls');
 
 })
 app.post("/urls", (req, res) => {
  // console.log(req.body); 
-  let randomUrl = generateRandomString(req.body.longURL);
-  urlDatabase[randomUrl] = req.body.longURL;
+  let shortURL = generateRandomString(req.body.longURL);
+  
+  urlDatabase[shortURL] = {"longURL":req.body.longURL,"userID":req.cookies.user_id};
+//console.log("/urls --->",urlDatabase)
+  
   //console.log(urlDatabase)
   //res.send(randomUrl);   
-  res.redirect(`/urls/${randomUrl}`)      // Respond with 'Ok' (we will replace this)
+  res.redirect(`/urls/${shortURL}`)      // Respond with 'Ok' (we will replace this)
 });
 //button for update page
 app.post("/urls/:shortURL/update", (req, res) => {
    let randomUrl = generateRandomString(req.body.longURL);
-  //console.log("----->", req.body)
-  urlDatabase[req.params.shortURL] = req.body.longURL ;
-  //console.log(urlDatabase)
+   //console.log("long url",req.body.longURL, "user id",req.cookies.user_id)
+   urlDatabase[randomUrl] = {'longURL' : req.body.longURL, "userID":req.cookies.user_id};
+
   // urlDatabase.forEach(req.params.shortURL[longURL]===randomUrl =>{
     
   // };
@@ -136,7 +172,7 @@ app.post("/logout",(req,res)=>{
   let email = req.body.email;/////check if an email and pasword are correct
   let password = req.body.password;
 
-  console.log(emailLookup(email))
+  //console.log(emailLookup(email))
   //console.log(users[emailLookup(email)].email)
   let userId = emailLookup(email);
   if (!userId){

@@ -31,9 +31,9 @@
       <tbody>
         <% Object.keys(urls).forEach((url)=>{ %>
           <tr>
-            <td><%= url %></td>
+            <td><%= url%></td>
 
-            <td><%= urls[url] %></td>
+            <td><%= urls[url].longURL %></td>
             <td><form method="POST" action="/urls/<%= url %>/delete"><button type="submit">Delete</button></form>
             </td>
             
