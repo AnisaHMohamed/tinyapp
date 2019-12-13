@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const bcrypt = require('bcrypt');
-const {emailLookup, paswordLookup, urlsForUser} = require('./helper')
+const {emailLookup, paswordLookup, urlsForUser} = require('./helper');
 const PORT = 8080; // default port 8080
 let cookieSession = require('cookie-session');
 
@@ -9,7 +9,7 @@ app.use(cookieSession({
   name: 'session',
   secret: 'Anisa',
 
-  maxAge: 24 * 60 * 60 * 1000 // 24 hours 
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
 }));
 const users = {
   "userRandomID": {
@@ -36,7 +36,7 @@ const generateRandomString = (longURL) => {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
-}
+};
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 app.get("/", (req, res) => {
@@ -44,7 +44,7 @@ app.get("/", (req, res) => {
 });
 
 app.listen(PORT, () => {
-   console.log(`Example app listening on port ${PORT}!`);
+  console.log(`Example app listening on port ${PORT}!`);
 });
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
@@ -100,7 +100,7 @@ app.post("/urls/:shortURL/delete",(req,res) =>{
   if (req.session.user_id === urlDatabase[req.params.shortURL].userID) {
     delete urlDatabase[req.params.shortURL];
   }
-   res.redirect('/urls');
+  res.redirect('/urls');
 });
 app.post("/urls", (req, res) => {
   // console.log(req.body);
@@ -153,10 +153,7 @@ app.post("/login",(req,res) =>{
     res.redirect('/urls');
   }
 });
-/*If a user with that e-mail cannot be found, return a response with a 403 status code.
- If a user with that e-mail address is located, compare the password given in the form with the existing user's password. If it does not match, return a response with a 403 status code.
- If both checks pass, set the user_id cookie with the matching user's random ID, then redirect to /urls.
-*/
+
 app.post("/logout",(req,res)=>{
   req.session.user_id = null;
   res.redirect('/urls/new');
