@@ -13,12 +13,15 @@
 // };
 
 const emailLookup = (emailToCheck,users) =>{
+  console.log("users ->",users)
+  console.log("emails ->",emailToCheck)
   for (let userId in users) {
     if (users[userId].email === emailToCheck) {
 
       return userId;
     }
   }
+
   return false;
 };
 const paswordLookup = (passwordToCheck,users) =>{
