@@ -24,7 +24,7 @@ const emailLookup = (emailToCheck,users) =>{
 
   return false;
 };
-const paswordLookup = (passwordToCheck,users) =>{
+const passwordLookup = (passwordToCheck,users) =>{
   for (let user in users) {
 
     if (users[user].password === passwordToCheck) {
@@ -47,4 +47,4 @@ const urlsForUser = (id,urlDatabase) =>{
   console.log(id,"urls for user function",urlsForID);
   return urlsForID;
 };
-module.exports = { emailLookup, paswordLookup, urlsForUser};
+module.exports = { emailLookup, passwordLookup, urlsForUser};
