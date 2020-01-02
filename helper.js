@@ -11,6 +11,8 @@
 //     password: "dishwasher-funk"
 //   }
 // };
+const bcrypt = require('bcrypt');
+
 
 const emailLookup = (emailToCheck,users) =>{
   console.log("users ->",users)
@@ -27,7 +29,9 @@ const emailLookup = (emailToCheck,users) =>{
 const passwordLookup = (passwordToCheck,users) =>{
   for (let user in users) {
 
-    if (users[user].password === passwordToCheck) {
+    // if (users[user].password === passwordToCheck) {
+      if (bcrypt.compareSync(passwordToCheck,users[user].password)) { 
+    
       return true;
     }
   }

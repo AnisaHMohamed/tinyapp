@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const bcrypt = require('bcrypt');
-const { emailLookup, paswordLookup, urlsForUser } = require('./helper');
+const { emailLookup, passwordLookup, urlsForUser } = require('./helper');
 const PORT = 8080; // default port 8080
 let cookieSession = require('cookie-session');
 
@@ -142,16 +142,16 @@ app.post("/logout", (req, res) => {
   res.redirect('/urls/new');
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", (req, res) =>{
   let email = req.body.email;
   let password = req.body.password;
   let userId = emailLookup(email, users);
 
   if (!userId) {
     res.status(403).send("Invalid Email");
-  } else if (userId && (paswordLookup(password, users)) === false) {
+  } else if (userId && (passwordLookup(password, users)) === false) {
     res.status(403).send("Incorrect Password");
-  } else if (userId && (paswordLookup(password, users))) {
+  } else if (userId && (passwordLookup(password, users))) {
     req.session.user_id = userId;
     res.redirect('/urls');
   }
